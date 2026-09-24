@@ -9,7 +9,6 @@ import {
   Flame,
   BarChart3,
   Settings,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 
@@ -30,19 +29,19 @@ export const Sidebar = ({ isOpen, onClose }) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-[#26324A]/20 backdrop-blur-xs md:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed top-16 bottom-0 left-0 z-40 w-64 flex-col justify-between border-r border-slate-850 bg-slate-950/95 p-4 backdrop-blur-xl transition-transform duration-300 md:translate-x-0 ${
+        className={`fixed top-16 bottom-0 left-0 z-40 w-64 flex-col justify-between border-r border-[#E5E2F0] bg-[#EFECFA] p-4 backdrop-blur-md transition-transform duration-300 md:translate-x-0 ${
           isOpen ? 'translate-x-0 flex' : '-translate-x-full md:flex'
         }`}
       >
         <div className="space-y-6">
-          <div className="px-2 py-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          <div className="px-3 py-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#9AA5B8]">
               Workspace & Scheduling
             </span>
           </div>
@@ -56,18 +55,21 @@ export const Sidebar = ({ isOpen, onClose }) => {
                   to={item.path}
                   onClick={onClose}
                   className={({ isActive }) =>
-                    `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    `group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${
                       isActive
-                        ? 'bg-gradient-to-r from-brand-600/20 to-indigo-600/10 border border-brand-500/30 text-brand-300 shadow-glow'
-                        : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+                        ? 'bg-[#E2DCF7] text-[#5A4AB8] border border-[#D0C6F0] shadow-xs'
+                        : 'text-[#4A5568] hover:text-[#26324A] hover:bg-[#E7E2F5]'
                     }`
                   }
                 >
                   {({ isActive }) => (
                     <>
+                      {isActive && (
+                        <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-4 bg-[#8B7BE8] rounded-full" />
+                      )}
                       <Icon
-                        className={`w-4 h-4 transition-transform group-hover:scale-110 ${
-                          isActive ? 'text-brand-400' : 'text-slate-400'
+                        className={`w-4 h-4 transition-transform group-hover:scale-105 ${
+                          isActive ? 'text-[#7A68DE]' : 'text-[#8B7BE8]'
                         }`}
                       />
                       <span>{item.label}</span>
@@ -79,14 +81,16 @@ export const Sidebar = ({ isOpen, onClose }) => {
           </nav>
         </div>
 
-        {/* Engine Status Card */}
-        <div className="p-3.5 rounded-2xl bg-gradient-to-b from-brand-950/40 to-slate-900/60 border border-brand-500/20">
+        {/* Adaptive Engine Card */}
+        <div className="p-3.5 rounded-2xl bg-gradient-to-b from-[#FFFFFF] to-[#F5F2FC] border border-[#E2DCF7] shadow-xs">
           <div className="flex items-center gap-2 mb-1.5">
-            <Zap className="w-4 h-4 text-brand-400 fill-brand-400 animate-pulse-subtle" />
-            <span className="text-xs font-bold text-brand-200">Adaptive Engine</span>
+            <div className="p-1 rounded-lg bg-[#ECE9FB] text-[#7A68DE]">
+              <Zap className="w-3.5 h-3.5 fill-current" />
+            </div>
+            <span className="text-xs font-bold text-[#26324A]">Adaptive Engine</span>
           </div>
-          <p className="text-[11px] text-slate-400 leading-snug">
-            Autonomous conflict-free scheduling and dynamic adherence tracking active.
+          <p className="text-[11px] text-[#718096] leading-relaxed">
+            Autonomous conflict-free scheduling & systematic adherence active.
           </p>
         </div>
       </aside>

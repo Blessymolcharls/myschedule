@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, CheckCircle, AlertTriangle, Calendar, Layers, Clock } from 'lucide-react';
+import { X, Sparkles, CheckCircle, AlertTriangle, Layers } from 'lucide-react';
 import { scheduleApi } from '../../services/api';
 import confetti from 'canvas-confetti';
 
@@ -31,23 +31,25 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg rounded-3xl bg-slate-900 border border-brand-500/30 shadow-2xl p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#26324A]/25 backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-lg rounded-3xl bg-[#FFFFFF] border border-[#E2DCF7] shadow-popover p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F0EDF9]">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20">
+            <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Intelligent Auto-Scheduler</h2>
-              <p className="text-xs text-slate-400">
+              <h2 className="text-base sm:text-lg font-bold text-[#26324A]">
+                Intelligent Auto-Scheduler
+              </h2>
+              <p className="text-xs text-[#718096]">
                 Calculates deadline urgency, priority score & fits tasks into free windows.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[#718096] hover:text-[#26324A] hover:bg-[#F2EFFB] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -56,7 +58,7 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
         {!result ? (
           <div className="mt-5 space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">
                 Planning Horizon
               </label>
               <div className="grid grid-cols-3 gap-2.5">
@@ -69,10 +71,10 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
                     type="button"
                     key={item.days}
                     onClick={() => setDaysAhead(item.days)}
-                    className={`py-3 px-2 rounded-2xl border text-xs font-semibold transition-all ${
+                    className={`py-3 px-2 rounded-2xl border text-xs font-bold transition-all ${
                       daysAhead === item.days
-                        ? 'bg-brand-600/30 border-brand-500 text-brand-200 shadow-glow'
-                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                        ? 'bg-[#ECE9FB] border-[#D0C6F0] text-[#6450C7] shadow-xs'
+                        : 'bg-[#FAF9FD] border-[#E5E2F0] text-[#718096] hover:border-[#D6D0EB]'
                     }`}
                   >
                     {item.label}
@@ -81,24 +83,24 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2.5 text-xs text-slate-400">
-              <div className="font-semibold text-slate-300 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-brand-400" />
+            <div className="p-4 rounded-2xl bg-[#FBFAFF] border border-[#EAE7F5] space-y-2 text-xs text-[#718096]">
+              <div className="font-bold text-[#26324A] flex items-center gap-2">
+                <Layers className="w-4 h-4 text-[#8B7BE8]" />
                 Scheduling Engine Rules Applied:
               </div>
-              <ul className="list-disc list-inside space-y-1 pl-1 text-[11px]">
+              <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] leading-relaxed">
                 <li>Strict adherence to configured Working Hours and Sleep Cycles</li>
                 <li>Fixed commitments are 100% protected and unmoveable</li>
-                <li>Tasks with impending deadlines received elevated priority weighting</li>
-                <li>Sessions longer than max threshold are cleanly chunked with buffers</li>
+                <li>Impending deadlines receive elevated priority weighting</li>
+                <li>Long sessions are cleanly chunked with buffer intervals</li>
               </ul>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#F0EDF9]">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold"
+                className="btn-secondary-pastel px-4 py-2.5 text-xs"
               >
                 Cancel
               </button>
@@ -106,35 +108,35 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
                 type="button"
                 disabled={loading}
                 onClick={handleRun}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-glow transition-all disabled:opacity-50"
+                className="btn-primary-pastel flex items-center gap-2 px-5 py-2.5 text-xs font-bold shadow-button disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4" />
-                {loading ? 'Optimizing Schedule...' : 'Generate Optimized Schedule'}
+                <span>{loading ? 'Optimizing Schedule...' : 'Generate Optimized Schedule'}</span>
               </button>
             </div>
           </div>
         ) : (
           <div className="mt-5 space-y-4 animate-in fade-in">
-            <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 flex items-center gap-3">
-              <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+            <div className="p-4 rounded-2xl bg-[#E4F7F0] border border-[#BCECD9] text-[#1E7B58] flex items-center gap-3">
+              <CheckCircle className="w-6 h-6 text-[#1E7B58] flex-shrink-0" />
               <div>
                 <div className="font-bold text-sm">Schedule Optimized Successfully!</div>
-                <div className="text-xs text-emerald-400/80 mt-0.5">
+                <div className="text-xs text-[#207856] mt-0.5">
                   Scheduled {result.summary?.totalEventsScheduled || 0} sessions ({result.summary?.totalMinutesScheduled || 0} minutes).
                 </div>
               </div>
             </div>
 
             {result.unscheduledTasks?.length > 0 && (
-              <div className="p-4 rounded-2xl bg-amber-950/30 border border-amber-500/30 text-xs space-y-2">
-                <div className="flex items-center gap-2 text-amber-300 font-semibold">
-                  <AlertTriangle className="w-4 h-4 text-amber-400" />
+              <div className="p-4 rounded-2xl bg-[#FEF8E3] border border-[#F7E5A0] text-xs space-y-2">
+                <div className="flex items-center gap-2 text-[#8E6814] font-bold">
+                  <AlertTriangle className="w-4 h-4" />
                   {result.unscheduledTasks.length} Unscheduled Task(s) Notice
                 </div>
                 <div className="space-y-1.5 max-h-32 overflow-y-auto">
                   {result.unscheduledTasks.map((u, i) => (
-                    <div key={i} className="p-2 rounded-lg bg-slate-950/60 text-slate-300">
-                      <span className="font-semibold">{u.task?.title}</span>: {u.reason}
+                    <div key={i} className="p-2 rounded-xl bg-[#FFFFFF] border border-[#F7E5A0] text-[#718096]">
+                      <span className="font-bold text-[#26324A]">{u.task?.title}</span>: {u.reason}
                     </div>
                   ))}
                 </div>
@@ -145,7 +147,7 @@ export const AutoScheduleModal = ({ isOpen, onClose, onScheduleComplete }) => {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-glow"
+                className="btn-primary-pastel px-5 py-2.5 text-xs font-bold"
               >
                 View Calendar
               </button>

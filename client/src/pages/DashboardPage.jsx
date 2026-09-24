@@ -14,9 +14,8 @@ import {
   Shield,
   RefreshCw,
   AlertTriangle,
-  Lock,
 } from 'lucide-react';
-import { scheduleApi, taskApi, streakApi, timeLogApi } from '../services/api';
+import { scheduleApi, taskApi, streakApi } from '../services/api';
 import { TaskModal } from '../components/tasks/TaskModal';
 import { AutoScheduleModal } from '../components/schedule/AutoScheduleModal';
 import { Link } from 'react-router-dom';
@@ -94,23 +93,30 @@ export const DashboardPage = () => {
 
   const plannedMinutes = todayEvents.reduce((acc, e) => acc + (e.allocatedMinutes || 0), 0);
   const completedMinutes = todayEvents.reduce((acc, e) => acc + (e.completedMinutes || 0), 0);
-  const adherencePercent = plannedMinutes > 0 ? Math.min(100, Math.round((completedMinutes / plannedMinutes) * 100)) : (todayProgress?.adherencePercentage || 0);
+  const adherencePercent =
+    plannedMinutes > 0
+      ? Math.min(100, Math.round((completedMinutes / plannedMinutes) * 100))
+      : todayProgress?.adherencePercentage || 0;
+
+  const userName = user?.name ? user.name.split(' ')[0] : 'Blessy';
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
-      {/* Top Banner & Quick Actions */}
+    <div className="space-y-7 animate-in fade-in duration-300">
+      {/* Welcome Section & Primary Actions */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-brand-300 bg-clip-text text-transparent">
-            Welcome back, {user?.name?.split(' ')[0] || 'Scheduler'}!
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#26324A]">
+            Welcome back, {userName}!
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[#718096] mt-1 font-medium">
             Today is{' '}
-            {new Date().toLocaleDateString('en-US', {
-              weekday: 'long',
-              month: 'short',
-              day: 'numeric',
-            })}
+            <span className="text-[#26324A] font-semibold">
+              {new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </span>
             . Here is your intelligent productivity plan.
           </p>
         </div>
@@ -118,15 +124,15 @@ export const DashboardPage = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setTaskModalOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700/80 shadow-sm transition-all"
+            className="btn-secondary-pastel flex items-center gap-2 px-4 py-2.5 text-xs"
           >
-            <Plus className="w-4 h-4 text-brand-400" />
+            <Plus className="w-4 h-4 text-[#8B7BE8]" />
             <span>New Task</span>
           </button>
 
           <button
             onClick={() => setAutoScheduleOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-bold shadow-glow transition-all"
+            className="btn-primary-pastel flex items-center gap-2 px-5 py-2.5 text-xs shadow-button"
           >
             <Sparkles className="w-4 h-4" />
             <span>Run Auto-Scheduler</span>
@@ -134,121 +140,129 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* 4 Stat Cards Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1: Streak */}
-        <div className="glass-panel p-4 sm:p-5 relative overflow-hidden group">
+        {/* Card 1: Current Streak */}
+        <div className="pastel-card-interactive p-5 bg-[#FFFFFF]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400">Current Streak</span>
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              <Flame className="w-4 h-4 fill-amber-400 animate-pulse-subtle" />
+            <span className="text-xs font-bold text-[#718096]">Current Streak</span>
+            <div className="p-2 rounded-xl bg-[#FEF8E3] text-[#D99A1C] border border-[#F7E5A0]">
+              <Flame className="w-4 h-4 fill-current animate-pulse-subtle" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-amber-300">
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#26324A]">
               {streakSummary?.currentStreak || 0}
             </span>
-            <span className="text-xs text-slate-400 font-medium">Days</span>
+            <span className="text-xs font-bold text-[#D99A1C]">Days</span>
           </div>
-          <div className="mt-2 text-[11px] text-amber-400/90 font-medium flex items-center gap-1">
-            <span>Longest: {streakSummary?.longestStreak || 0} days</span>
+          <div className="mt-2 text-[11px] text-[#718096] font-medium">
+            Personal record: <span className="font-bold text-[#26324A]">{streakSummary?.longestStreak || 0} days</span>
           </div>
         </div>
 
-        {/* Metric 2: Today's Adherence */}
-        <div className="glass-panel p-4 sm:p-5 relative overflow-hidden group">
+        {/* Card 2: Schedule Adherence */}
+        <div className="pastel-card-interactive p-5 bg-[#FFFFFF]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400">Schedule Adherence</span>
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="text-xs font-bold text-[#718096]">Schedule Adherence</span>
+            <div className="p-2 rounded-xl bg-[#E4F7F0] text-[#1E7B58] border border-[#BCECD9]">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-emerald-400">
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#26324A]">
               {adherencePercent}%
             </span>
-            <span className="text-xs text-slate-400 font-medium">
+            <span className="text-[11px] text-[#718096] font-medium">
               Target: {preferences?.minAdherencePercentForStreak || 70}%
             </span>
           </div>
-          <div className="mt-2 w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div className="mt-2.5 w-full bg-[#EAE7F5] rounded-full h-2 overflow-hidden">
             <div
-              className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+              className="bg-[#78D6B0] h-full rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, adherencePercent)}%` }}
             />
           </div>
         </div>
 
-        {/* Metric 3: Planned Sessions */}
-        <div className="glass-panel p-4 sm:p-5 relative overflow-hidden group">
+        {/* Card 3: Planned Today */}
+        <div className="pastel-card-interactive p-5 bg-[#FFFFFF]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400">Planned Today</span>
-            <div className="p-2 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20">
+            <span className="text-xs font-bold text-[#718096]">Planned Today</span>
+            <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE] border border-[#DCD5F7]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-100">
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#26324A]">
               {Math.round((plannedMinutes / 60) * 10) / 10}
             </span>
-            <span className="text-xs text-slate-400 font-medium">Hours</span>
+            <span className="text-xs font-bold text-[#7A68DE]">Hours</span>
           </div>
-          <div className="mt-2 text-[11px] text-slate-400">
+          <div className="mt-2 text-[11px] text-[#718096] font-medium">
             {todayEvents.length} scheduled session(s)
           </div>
         </div>
 
-        {/* Metric 4: Protection Shields */}
-        <div className="glass-panel p-4 sm:p-5 relative overflow-hidden group">
+        {/* Card 4: Streak Protections */}
+        <div className="pastel-card-interactive p-5 bg-[#FFFFFF]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400">Streak Protections</span>
-            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <span className="text-xs font-bold text-[#718096]">Streak Protections</span>
+            <div className="p-2 rounded-xl bg-[#EEF2FC] text-[#3B5B9E] border border-[#D0DDF7]">
               <Shield className="w-4 h-4" />
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-indigo-300">
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-2xl sm:text-3xl font-extrabold text-[#26324A]">
               {streakSummary?.availableStreakProtections ?? 2}
             </span>
-            <span className="text-xs text-slate-400 font-medium">Available</span>
+            <span className="text-xs font-bold text-[#3B5B9E]">Shields</span>
           </div>
-          <div className="mt-2 text-[11px] text-slate-400">
-            Auto-freezes missed days
+          <div className="mt-2 text-[11px] text-[#718096] font-medium">
+            Emergency freeze available
           </div>
         </div>
       </div>
 
-      {/* Main Grid: Today's Timeline + Urgent Radar */}
+      {/* Main Grid: Today's Dynamic Timeline + Urgent Radar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Today's Interactive Timeline */}
-        <div className="lg:col-span-2 glass-panel p-5 sm:p-6 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-brand-400" />
-              <h2 className="text-base font-bold text-slate-100">Today's Dynamic Timeline</h2>
+        {/* Left 2 Cols: Today's Dynamic Timeline (Main Visual Focus) */}
+        <div className="lg:col-span-2 pastel-card p-6 bg-[#FFFFFF] space-y-4">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#F0EDF9]">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-[#26324A]">Today's Dynamic Timeline</h2>
+                <p className="text-[11px] text-[#718096]">Auto-allocated non-conflicting focus blocks</p>
+              </div>
             </div>
             <Link
               to="/calendar"
-              className="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1"
+              className="text-xs font-bold text-[#8B7BE8] hover:text-[#7A68DE] flex items-center gap-1 hover:underline"
             >
               Full Calendar <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {todayEvents.length === 0 ? (
-            <div className="text-center py-12 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-slate-850 flex items-center justify-center mx-auto text-slate-500">
-                <Calendar className="w-6 h-6" />
+            <div className="text-center py-12 px-4 space-y-3.5">
+              <div className="w-14 h-14 rounded-2xl bg-[#F4F1FA] border border-[#EAE7F5] flex items-center justify-center mx-auto text-[#8B7BE8]">
+                <Calendar className="w-7 h-7" />
               </div>
-              <p className="text-sm font-medium text-slate-300">No scheduled sessions for today yet.</p>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Click "Run Auto-Scheduler" to automatically allocate pending tasks into your available time slots.
-              </p>
+              <div className="space-y-1">
+                <p className="text-sm font-bold text-[#26324A]">No scheduled sessions for today yet</p>
+                <p className="text-xs text-[#718096] max-w-sm mx-auto leading-relaxed">
+                  Your smart auto-scheduler can transform your pending tasks and deadlines into a structured, balanced schedule in seconds.
+                </p>
+              </div>
               <button
                 onClick={() => setAutoScheduleOpen(true)}
-                className="mt-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-glow"
+                className="btn-primary-pastel inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold"
               >
-                Auto-Schedule Now
+                <Sparkles className="w-4 h-4" />
+                <span>Auto-Schedule Now</span>
               </button>
             </div>
           ) : (
@@ -262,42 +276,61 @@ export const DashboardPage = () => {
                     key={ev._id}
                     className={`p-3.5 rounded-2xl border transition-all ${
                       isCompleted
-                        ? 'bg-slate-950/40 border-slate-800/40 opacity-70'
+                        ? 'bg-[#FAF9FD] border-[#EAE7F5] opacity-75'
                         : isCurrentActive
-                        ? 'bg-brand-950/40 border-brand-500/50 shadow-glow'
-                        : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
+                        ? 'bg-[#F5F2FC] border-[#C8BFF2] shadow-sm'
+                        : 'bg-[#FBFAFF] border-[#EAE7F5] hover:border-[#D6D0EB]'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="flex items-start gap-3">
-                        <div className="flex flex-col items-center justify-center w-14 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono font-bold text-slate-300">
-                          <span>{new Date(ev.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                          <span className="text-[9px] text-slate-500 font-normal">
+                        <div className="flex flex-col items-center justify-center w-14 py-2 rounded-xl bg-[#FFFFFF] border border-[#E5E2F0] text-[11px] font-mono font-bold text-[#26324A] shadow-xs">
+                          <span>
+                            {new Date(ev.startTime).toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                          <span className="text-[9px] text-[#718096] font-normal">
                             {ev.allocatedMinutes}m
                           </span>
                         </div>
 
                         <div>
-                          <div className="flex items-center gap-2">
-                            <span className={`text-sm font-semibold ${isCompleted ? 'line-through text-slate-400' : 'text-slate-100'}`}>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={`text-xs sm:text-sm font-bold ${
+                                isCompleted ? 'line-through text-[#9AA5B8]' : 'text-[#26324A]'
+                              }`}
+                            >
                               {ev.title}
                             </span>
                             {ev.totalChunks > 1 && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">
-                                Chunk {ev.chunkIndex}/{ev.totalChunks}
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#ECE9FB] text-[#7A68DE] font-semibold">
+                                Session {ev.chunkIndex}/{ev.totalChunks}
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                            <span>{new Date(ev.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(ev.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-[#718096]">
+                            <span>
+                              {new Date(ev.startTime).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}{' '}
+                              -{' '}
+                              {new Date(ev.endTime).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
                             {ev.taskId?.priority && (
                               <span
-                                className={`text-[10px] uppercase font-bold px-1.5 py-0.2 rounded ${
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                                   ev.taskId.priority === 'urgent'
-                                    ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                                    ? 'bg-[#FDECEC] text-[#9E3B3B] border border-[#F7C8C8]'
                                     : ev.taskId.priority === 'high'
-                                    ? 'bg-amber-500/20 text-amber-400'
-                                    : 'bg-slate-800 text-slate-400'
+                                    ? 'bg-[#FEF8E3] text-[#8E6814] border border-[#F7E5A0]'
+                                    : 'bg-[#ECE9FB] text-[#6450C7] border border-[#DCD5F7]'
                                 }`}
                               >
                                 {ev.taskId.priority}
@@ -314,7 +347,7 @@ export const DashboardPage = () => {
                             {isCurrentActive ? (
                               <button
                                 onClick={() => stopSession(false)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF9FD] text-xs font-bold text-[#26324A] border border-[#E5E2F0]"
                               >
                                 <Square className="w-3.5 h-3.5 fill-current" />
                                 <span>Pause</span>
@@ -322,24 +355,24 @@ export const DashboardPage = () => {
                             ) : (
                               <button
                                 onClick={() => startSession(ev.taskId?._id || ev.taskId, ev._id)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-600/30 hover:bg-brand-600/50 text-brand-300 border border-brand-500/30 text-xs font-semibold transition-all"
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] border border-[#D0C6F0] text-xs font-bold transition-all"
                               >
                                 <Play className="w-3.5 h-3.5 fill-current" />
-                                <span>Start Focus</span>
+                                <span>Focus</span>
                               </button>
                             )}
 
                             <button
                               onClick={() => handleCompleteEvent(ev)}
-                              title="Mark Session Completed"
-                              className="p-1.5 rounded-xl bg-slate-800 hover:bg-emerald-600/20 hover:text-emerald-400 text-slate-400 transition-colors"
+                              title="Mark Completed"
+                              className="p-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E4F7F0] hover:text-[#1E7B58] text-[#718096] border border-[#E5E2F0] transition-colors"
                             >
                               <CheckCircle2 className="w-4 h-4" />
                             </button>
                           </>
                         )}
                         {isCompleted && (
-                          <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                          <span className="text-xs text-[#1E7B58] font-bold flex items-center gap-1 bg-[#E4F7F0] px-2.5 py-1 rounded-full border border-[#BCECD9]">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Done
                           </span>
                         )}
@@ -352,38 +385,38 @@ export const DashboardPage = () => {
           )}
         </div>
 
-        {/* Right 1 Col: Urgent Deadlines & Focus Box */}
+        {/* Right 1 Col: Urgent Radar + Active Focus Widget */}
         <div className="space-y-6">
           {/* Active Live Session Box */}
           {activeSession && (
-            <div className="glass-panel p-5 border-brand-500/40 shadow-glow bg-gradient-to-b from-brand-950/40 to-slate-900/80">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <span className="text-xs font-bold text-brand-400 uppercase tracking-wider">
+            <div className="pastel-card p-5 bg-gradient-to-b from-[#FFFFFF] to-[#F8F6FD] border-[#C8BFF2] shadow-card">
+              <div className="flex items-center justify-between pb-3 border-b border-[#F0EDF9]">
+                <span className="text-xs font-bold text-[#7A68DE] uppercase tracking-wider">
                   Live Focus Session
                 </span>
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#78D6B0] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#54C497]"></span>
                 </span>
               </div>
               <div className="mt-3">
-                <h3 className="text-sm font-bold text-slate-100">
+                <h3 className="text-sm font-bold text-[#26324A] truncate">
                   {activeSession.taskId?.title || 'Current Task'}
                 </h3>
-                <div className="text-3xl font-extrabold font-mono text-brand-300 mt-2">
+                <div className="text-3xl font-extrabold font-mono text-[#8B7BE8] mt-2">
                   {formattedElapsed}
                 </div>
               </div>
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => stopSession(false)}
-                  className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200"
+                  className="flex-1 py-2 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF9FD] text-xs font-bold text-[#26324A] border border-[#E5E2F0]"
                 >
                   Pause & Save
                 </button>
                 <button
                   onClick={() => stopSession(true)}
-                  className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white shadow-glow"
+                  className="flex-1 py-2 rounded-xl bg-[#78D6B0] hover:bg-[#68C8A2] text-xs font-bold text-[#14573D] shadow-sm"
                 >
                   Complete Task
                 </button>
@@ -391,39 +424,50 @@ export const DashboardPage = () => {
             </div>
           )}
 
-          {/* Urgent Deadlines Box */}
-          <div className="glass-panel p-5 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          {/* Urgent & Approaching Tasks */}
+          <div className="pastel-card p-5 bg-[#FFFFFF] space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F0EDF9]">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-bold text-slate-100">Urgent & Approaching</h3>
+                <div className="p-1 rounded-lg bg-[#FEF8E3] text-[#8E6814]">
+                  <AlertTriangle className="w-4 h-4" />
+                </div>
+                <h3 className="text-xs font-bold text-[#26324A]">Urgent & Approaching</h3>
               </div>
-              <Link to="/tasks" className="text-xs font-semibold text-brand-400 hover:underline">
+              <Link
+                to="/tasks"
+                className="text-xs font-bold text-[#8B7BE8] hover:text-[#7A68DE] hover:underline"
+              >
                 View All
               </Link>
             </div>
 
             {urgentTasks.length === 0 ? (
-              <p className="text-xs text-slate-500 text-center py-4">No urgent pending tasks!</p>
+              <div className="text-center py-6 text-xs text-[#9AA5B8] space-y-1">
+                <p className="font-semibold text-[#718096]">All clear!</p>
+                <p>No urgent deadlines approaching.</p>
+              </div>
             ) : (
               <div className="space-y-2.5">
                 {urgentTasks.map((t) => (
                   <div
                     key={t._id}
-                    className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs flex items-center justify-between gap-2"
+                    className="p-3 rounded-xl bg-[#FBFAFF] border border-[#EAE7F5] text-xs flex items-center justify-between gap-2 hover:border-[#D6D0EB] transition-colors"
                   >
                     <div className="min-w-0">
-                      <p className="font-semibold text-slate-200 truncate">{t.title}</p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
+                      <p className="font-bold text-[#26324A] truncate">{t.title}</p>
+                      <p className="text-[11px] text-[#718096] mt-0.5">
                         {t.deadline
-                          ? `Due: ${new Date(t.deadline).toLocaleDateString([], { month: 'short', day: 'numeric' })}`
+                          ? `Due: ${new Date(t.deadline).toLocaleDateString([], {
+                              month: 'short',
+                              day: 'numeric',
+                            })}`
                           : `${t.estimatedDuration}m estimated`}
                       </p>
                     </div>
                     <button
                       onClick={() => startSession(t._id)}
                       title="Start Session"
-                      className="p-1.5 rounded-lg bg-slate-800 hover:bg-brand-600/30 text-slate-300 hover:text-brand-300 transition-colors"
+                      className="p-1.5 rounded-lg bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] transition-colors"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                     </button>

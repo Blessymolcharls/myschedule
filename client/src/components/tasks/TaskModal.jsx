@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Clock, Calendar, AlertCircle, Plus, Trash2, Tag } from 'lucide-react';
+import { X, Clock, Plus, Trash2 } from 'lucide-react';
 import { categoryApi } from '../../services/api';
 
 export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
@@ -69,20 +69,20 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-xl rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#26324A]/25 backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-xl rounded-3xl bg-[#FFFFFF] border border-[#E2DCF7] shadow-popover p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F0EDF9]">
           <div>
-            <h2 className="text-lg font-bold text-slate-100">
+            <h2 className="text-base sm:text-lg font-bold text-[#26324A]">
               {task ? 'Edit Task' : 'Create New Task'}
             </h2>
-            <p className="text-xs text-slate-400">
-              Configure estimated effort, priority, and deadlines for automatic scheduling.
+            <p className="text-xs text-[#718096]">
+              Define effort, priority, and deadlines for intelligent scheduling.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[#718096] hover:text-[#26324A] hover:bg-[#F2EFFB] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -90,35 +90,35 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Task Title *</label>
+            <label className="block text-xs font-bold text-[#26324A] mb-1.5">Task Title *</label>
             <input
               type="text"
               required
               placeholder="e.g. Implement user authentication module"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] placeholder-[#9AA5B8] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium focus:bg-[#FFFFFF]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Description</label>
+            <label className="block text-xs font-bold text-[#26324A] mb-1.5">Description</label>
             <textarea
               rows="2"
               placeholder="Add key deliverables or notes..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 text-sm"
+              className="w-full px-3.5 py-2 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] placeholder-[#9AA5B8] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium focus:bg-[#FFFFFF]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Category</label>
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">Category</label>
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-brand-500 text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
               >
                 <option value="">General (No Category)</option>
                 {categories.map((c) => (
@@ -130,27 +130,27 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Priority Level</label>
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">Priority Level</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-brand-500 text-sm font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-semibold"
               >
-                <option value="low" className="text-slate-400">Low Priority</option>
-                <option value="medium" className="text-blue-400">Medium Priority</option>
-                <option value="high" className="text-amber-400">High Priority</option>
-                <option value="urgent" className="text-rose-400 font-bold">Urgent (Immediate Boost)</option>
+                <option value="low">Low Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+                <option value="urgent">Urgent (Immediate Boost)</option>
               </select>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">
                 Estimated Duration (Minutes) *
               </label>
               <div className="relative">
-                <Clock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+                <Clock className="w-4 h-4 text-[#9AA5B8] absolute left-3.5 top-3" />
                 <input
                   type="number"
                   required
@@ -158,36 +158,36 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
                   step="5"
                   value={estimatedDuration}
                   onChange={(e) => setEstimatedDuration(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-brand-500 text-sm"
+                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Deadline</label>
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">Deadline</label>
               <div className="relative">
                 <input
                   type="datetime-local"
                   value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-brand-500 text-sm"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Preferred Time of Day</label>
+            <label className="block text-xs font-bold text-[#26324A] mb-1.5">Preferred Time of Day</label>
             <div className="grid grid-cols-4 gap-2">
               {['any', 'morning', 'afternoon', 'evening'].map((time) => (
                 <button
                   type="button"
                   key={time}
                   onClick={() => setPreferredTimeOfDay(time)}
-                  className={`py-2 px-2 text-xs font-medium rounded-xl border capitalize transition-all ${
+                  className={`py-2 px-2 text-xs font-bold rounded-xl border capitalize transition-all ${
                     preferredTimeOfDay === time
-                      ? 'bg-brand-600/30 border-brand-500 text-brand-200'
-                      : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                      ? 'bg-[#ECE9FB] border-[#D0C6F0] text-[#6450C7]'
+                      : 'bg-[#FAF9FD] border-[#E5E2F0] text-[#718096] hover:border-[#D6D0EB]'
                   }`}
                 >
                   {time}
@@ -198,7 +198,7 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
 
           {/* Subtasks */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Checklist / Subtasks</label>
+            <label className="block text-xs font-bold text-[#26324A] mb-1.5">Checklist / Subtasks</label>
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
@@ -211,12 +211,12 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
                     handleAddSubtask();
                   }
                 }}
-                className="flex-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-brand-500"
+                className="flex-1 px-3 py-2 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] text-xs placeholder-[#9AA5B8] focus:outline-none focus:border-[#8B7BE8]"
               />
               <button
                 type="button"
                 onClick={handleAddSubtask}
-                className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold"
+                className="px-3 py-2 bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] rounded-xl text-xs font-bold"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -225,12 +225,15 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
             {subtasks.length > 0 && (
               <div className="space-y-1.5 max-h-32 overflow-y-auto">
                 {subtasks.map((st, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800/80 text-xs">
-                    <span className="text-slate-300">{st.title}</span>
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-2 rounded-xl bg-[#FAF9FD] border border-[#EAE7F5] text-xs"
+                  >
+                    <span className="text-[#26324A] font-medium">{st.title}</span>
                     <button
                       type="button"
                       onClick={() => handleRemoveSubtask(i)}
-                      className="text-slate-500 hover:text-red-400"
+                      className="text-[#9AA5B8] hover:text-[#9E3B3B]"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -240,17 +243,17 @@ export const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#F0EDF9]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors"
+              className="btn-secondary-pastel px-4 py-2.5 text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-sm font-semibold shadow-glow transition-all"
+              className="btn-primary-pastel px-5 py-2.5 text-xs shadow-button"
             >
               {task ? 'Update Task' : 'Create Task'}
             </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Lock, Clock, Calendar, Repeat } from 'lucide-react';
+import { X, Lock, Repeat } from 'lucide-react';
 
 export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) => {
   const [title, setTitle] = useState('');
@@ -9,7 +9,7 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurrencePattern, setRecurrencePattern] = useState('weekly');
   const [daysOfWeek, setDaysOfWeek] = useState([]);
-  const [color, setColor] = useState('#ef4444');
+  const [color, setColor] = useState('#E99A9A');
 
   const DAYS = [
     { label: 'Sun', value: 0 },
@@ -31,7 +31,7 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
         setIsRecurring(commitment.isRecurring || false);
         setRecurrencePattern(commitment.recurrencePattern || 'weekly');
         setDaysOfWeek(commitment.daysOfWeek || []);
-        setColor(commitment.color || '#ef4444');
+        setColor(commitment.color || '#E99A9A');
       } else {
         const now = new Date();
         now.setMinutes(0, 0, 0);
@@ -42,8 +42,8 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
         setEndTime(nextHour.toISOString().slice(0, 16));
         setIsRecurring(false);
         setRecurrencePattern('weekly');
-        setDaysOfWeek([1, 2, 3, 4, 5]); // Mon-Fri default
-        setColor('#ef4444');
+        setDaysOfWeek([1, 2, 3, 4, 5]);
+        setColor('#E99A9A');
       }
     }
   }, [isOpen, commitment]);
@@ -73,25 +73,25 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#26324A]/25 backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-lg rounded-3xl bg-[#FFFFFF] border border-[#E2DCF7] shadow-popover p-6 sm:p-7 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F0EDF9]">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20">
-              <Lock className="w-5 h-5" />
+            <div className="p-2 rounded-xl bg-[#FDECEC] text-[#9E3B3B] border border-[#F7C8C8]">
+              <Lock className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">
+              <h2 className="text-base sm:text-lg font-bold text-[#26324A]">
                 {commitment ? 'Edit Fixed Commitment' : 'Add Fixed Commitment'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#718096]">
                 Immovable blocks (classes, shifts, meetings) that auto-scheduling avoids.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-[#718096] hover:text-[#26324A] hover:bg-[#F2EFFB] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -99,63 +99,63 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Commitment Title *</label>
+            <label className="block text-xs font-bold text-[#26324A] mb-1.5">Commitment Title *</label>
             <input
               type="text"
               required
               placeholder="e.g. Operating Systems Lecture / Team Sync"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-rose-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">Start Time *</label>
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">Start Time *</label>
               <input
                 type="datetime-local"
                 required
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-rose-500 text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">End Time *</label>
+              <label className="block text-xs font-bold text-[#26324A] mb-1.5">End Time *</label>
               <input
                 type="datetime-local"
                 required
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 focus:outline-none focus:border-rose-500 text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-[#26324A] focus:outline-none focus:border-[#8B7BE8] text-xs font-medium"
               />
             </div>
           </div>
 
           {/* Recurrence Toggle */}
-          <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+          <div className="p-4 rounded-2xl bg-[#FBFAFF] border border-[#EAE7F5] space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Repeat className="w-4 h-4 text-brand-400" />
-                <span className="text-xs font-semibold text-slate-200">Recurring Schedule</span>
+                <Repeat className="w-4 h-4 text-[#8B7BE8]" />
+                <span className="text-xs font-bold text-[#26324A]">Recurring Schedule</span>
               </div>
               <input
                 type="checkbox"
                 checked={isRecurring}
                 onChange={(e) => setIsRecurring(e.target.checked)}
-                className="h-4 w-4 rounded bg-slate-900 border-slate-700 text-brand-500 focus:ring-brand-500"
+                className="h-4 w-4 rounded bg-[#FFFFFF] border-[#D0C6F0] text-[#8B7BE8] focus:ring-[#8B7BE8]"
               />
             </div>
 
             {isRecurring && (
-              <div className="space-y-3 pt-2 border-t border-slate-850 animate-in fade-in">
+              <div className="space-y-3 pt-3 border-t border-[#F0EDF9] animate-in fade-in">
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-400 mb-1">Repeat Pattern</label>
+                  <label className="block text-[11px] font-bold text-[#718096] mb-1">Repeat Pattern</label>
                   <select
                     value={recurrencePattern}
                     onChange={(e) => setRecurrencePattern(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-200"
+                    className="w-full px-3 py-2 rounded-xl bg-[#FFFFFF] border border-[#E5E2F0] text-xs font-medium text-[#26324A]"
                   >
                     <option value="daily">Every Day</option>
                     <option value="weekdays">Every Weekday (Mon-Fri)</option>
@@ -165,17 +165,17 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
 
                 {recurrencePattern === 'weekly' && (
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-400 mb-1">Repeat On</label>
+                    <label className="block text-[11px] font-bold text-[#718096] mb-1">Repeat On</label>
                     <div className="flex gap-1.5 justify-between">
                       {DAYS.map((d) => (
                         <button
                           type="button"
                           key={d.value}
                           onClick={() => toggleDay(d.value)}
-                          className={`flex-1 py-1.5 text-xs rounded-lg font-medium border transition-all ${
+                          className={`flex-1 py-1.5 text-xs rounded-xl font-bold border transition-all ${
                             daysOfWeek.includes(d.value)
-                              ? 'bg-rose-500/20 border-rose-500 text-rose-300'
-                              : 'bg-slate-900 border-slate-800 text-slate-400'
+                              ? 'bg-[#ECE9FB] border-[#D0C6F0] text-[#6450C7]'
+                              : 'bg-[#FFFFFF] border-[#E5E2F0] text-[#718096]'
                           }`}
                         >
                           {d.label}
@@ -188,17 +188,17 @@ export const CommitmentModal = ({ isOpen, onClose, onSave, commitment = null }) 
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#F0EDF9]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold transition-colors"
+              className="btn-secondary-pastel px-4 py-2.5 text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-sm font-semibold shadow-glow transition-all"
+              className="px-5 py-2.5 rounded-xl bg-[#E99A9A] hover:bg-[#DE8686] text-[#FFFFFF] font-bold text-xs shadow-sm transition-all"
             >
               {commitment ? 'Update Commitment' : 'Lock Commitment'}
             </button>

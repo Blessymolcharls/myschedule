@@ -3,14 +3,12 @@ import {
   CheckSquare,
   Plus,
   Search,
-  Filter,
   Play,
   CheckCircle2,
   Trash2,
   Edit2,
   Clock,
   Calendar,
-  Layers,
   Kanban,
   List,
 } from 'lucide-react';
@@ -29,7 +27,7 @@ export const TasksPage = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
-  const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban'
+  const [viewMode, setViewMode] = useState('list');
 
   // Modals
   const [taskModalOpen, setTaskModalOpen] = useState(false);
@@ -86,13 +84,17 @@ export const TasksPage = () => {
 
   const getPriorityBadge = (priority) => {
     const map = {
-      urgent: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
-      high: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-      medium: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      low: 'bg-slate-700/50 text-slate-400 border-slate-700',
+      urgent: 'bg-[#FDECEC] text-[#9E3B3B] border-[#F7C8C8]',
+      high: 'bg-[#FEF8E3] text-[#8E6814] border-[#F7E5A0]',
+      medium: 'bg-[#EEF2FC] text-[#3B5B9E] border-[#D0DDF7]',
+      low: 'bg-[#FAF9FD] text-[#718096] border-[#E5E2F0]',
     };
     return (
-      <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${map[priority] || map.medium}`}>
+      <span
+        className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border ${
+          map[priority] || map.medium
+        }`}
+      >
         {priority}
       </span>
     );
@@ -103,11 +105,13 @@ export const TasksPage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2.5">
-            <CheckSquare className="w-6 h-6 text-brand-400" />
+          <h1 className="text-2xl font-extrabold text-[#26324A] flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
+              <CheckSquare className="w-5 h-5" />
+            </div>
             Task Management & Effort Allocation
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#718096] mt-1 font-medium">
             Organize tasks, define deadlines and estimated effort for the intelligent scheduling engine.
           </p>
         </div>
@@ -117,7 +121,7 @@ export const TasksPage = () => {
             setSelectedTask(null);
             setTaskModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-bold shadow-glow transition-all self-start sm:self-auto"
+          className="btn-primary-pastel flex items-center gap-2 px-4 py-2 text-xs font-bold shadow-button self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Task</span>
@@ -125,17 +129,17 @@ export const TasksPage = () => {
       </div>
 
       {/* Filter and View Bar */}
-      <div className="glass-panel p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="pastel-card p-4 bg-[#FFFFFF] flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5 flex-1">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-[#9AA5B8] absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search tasks..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+              className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-xs text-[#26324A] placeholder-[#9AA5B8] focus:outline-none focus:border-[#8B7BE8] font-medium"
             />
           </div>
 
@@ -143,7 +147,7 @@ export const TasksPage = () => {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none"
+            className="px-3.5 py-2 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-xs font-semibold text-[#26324A] focus:outline-none focus:border-[#8B7BE8]"
           >
             <option value="">All Priorities</option>
             <option value="urgent">Urgent</option>
@@ -156,7 +160,7 @@ export const TasksPage = () => {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 focus:outline-none"
+            className="px-3.5 py-2 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] text-xs font-semibold text-[#26324A] focus:outline-none focus:border-[#8B7BE8]"
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
@@ -168,11 +172,13 @@ export const TasksPage = () => {
         </div>
 
         {/* View mode toggle */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-850 self-end md:self-auto">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FAF9FD] border border-[#EAE7F5] self-end md:self-auto">
           <button
             onClick={() => setViewMode('list')}
             className={`p-1.5 rounded-lg text-xs font-semibold ${
-              viewMode === 'list' ? 'bg-brand-600 text-white' : 'text-slate-400 hover:text-slate-200'
+              viewMode === 'list'
+                ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                : 'text-[#718096] hover:text-[#26324A]'
             }`}
           >
             <List className="w-4 h-4" />
@@ -180,7 +186,9 @@ export const TasksPage = () => {
           <button
             onClick={() => setViewMode('kanban')}
             className={`p-1.5 rounded-lg text-xs font-semibold ${
-              viewMode === 'kanban' ? 'bg-brand-600 text-white' : 'text-slate-400 hover:text-slate-200'
+              viewMode === 'kanban'
+                ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                : 'text-[#718096] hover:text-[#26324A]'
             }`}
           >
             <Kanban className="w-4 h-4" />
@@ -190,26 +198,22 @@ export const TasksPage = () => {
 
       {/* Task List / Kanban View */}
       {viewMode === 'list' ? (
-        <div className="glass-panel p-4 sm:p-6 space-y-3">
+        <div className="pastel-card p-5 bg-[#FFFFFF] space-y-3">
           {tasks.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 text-sm">
+            <div className="text-center py-12 text-[#9AA5B8] text-sm">
               No tasks found. Create your first task to get scheduled!
             </div>
           ) : (
             tasks.map((t) => {
               const isCompleted = t.status === 'completed';
-              const progressPercent = Math.min(
-                100,
-                Math.round(((t.completedDuration || 0) / (t.estimatedDuration || 1)) * 100)
-              );
 
               return (
                 <div
                   key={t._id}
                   className={`p-4 rounded-2xl border transition-all ${
                     isCompleted
-                      ? 'bg-slate-950/40 border-slate-800/40 opacity-70'
-                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                      ? 'bg-[#FAF9FD] border-[#EAE7F5] opacity-75'
+                      : 'bg-[#FBFAFF] border-[#EAE7F5] hover:border-[#D6D0EB] shadow-xs'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -218,8 +222,8 @@ export const TasksPage = () => {
                         onClick={() => handleComplete(t._id)}
                         className={`mt-0.5 p-1 rounded-lg transition-colors ${
                           isCompleted
-                            ? 'text-emerald-400'
-                            : 'text-slate-600 hover:text-emerald-400'
+                            ? 'text-[#1E7B58]'
+                            : 'text-[#9AA5B8] hover:text-[#1E7B58]'
                         }`}
                       >
                         <CheckCircle2 className="w-5 h-5" />
@@ -229,7 +233,7 @@ export const TasksPage = () => {
                         <div className="flex items-center gap-2 flex-wrap">
                           <h3
                             className={`text-sm font-bold truncate ${
-                              isCompleted ? 'line-through text-slate-500' : 'text-slate-100'
+                              isCompleted ? 'line-through text-[#9AA5B8]' : 'text-[#26324A]'
                             }`}
                           >
                             {t.title}
@@ -237,9 +241,9 @@ export const TasksPage = () => {
                           {getPriorityBadge(t.priority)}
                           {t.categoryId && (
                             <span
-                              className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                              className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                               style={{
-                                backgroundColor: `${t.categoryId.color}20`,
+                                backgroundColor: `${t.categoryId.color}15`,
                                 color: t.categoryId.color,
                               }}
                             >
@@ -249,22 +253,27 @@ export const TasksPage = () => {
                         </div>
 
                         {t.description && (
-                          <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                          <p className="text-xs text-[#718096] mt-1 line-clamp-1">
                             {t.description}
                           </p>
                         )}
 
                         {/* Metadata row */}
-                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-slate-400">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3.5 h-3.5 text-slate-500" />
+                        <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] text-[#718096]">
+                          <span className="flex items-center gap-1 font-medium">
+                            <Clock className="w-3.5 h-3.5 text-[#9AA5B8]" />
                             {t.completedDuration || 0}/{t.estimatedDuration} mins
                           </span>
 
                           {t.deadline && (
-                            <span className="flex items-center gap-1 text-amber-400">
+                            <span className="flex items-center gap-1 text-[#8E6814] font-semibold">
                               <Calendar className="w-3.5 h-3.5" />
-                              Due: {new Date(t.deadline).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                              Due: {new Date(t.deadline).toLocaleDateString([], {
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
                             </span>
                           )}
                         </div>
@@ -276,9 +285,9 @@ export const TasksPage = () => {
                       {!isCompleted && (
                         <button
                           onClick={() => startSession(t._id)}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-brand-600/30 hover:bg-brand-600/50 text-brand-300 border border-brand-500/30 text-xs font-semibold"
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] border border-[#D0C6F0] text-xs font-bold transition-all"
                         >
-                          <Play className="w-3 h-3 fill-current" />
+                          <Play className="w-3.5 h-3.5 fill-current" />
                           <span>Focus</span>
                         </button>
                       )}
@@ -288,14 +297,14 @@ export const TasksPage = () => {
                           setSelectedTask(t);
                           setTaskModalOpen(true);
                         }}
-                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200"
+                        className="p-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF9FD] text-[#718096] hover:text-[#26324A] border border-[#E5E2F0]"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
 
                       <button
                         onClick={() => handleDelete(t._id)}
-                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-500/20 text-slate-400 hover:text-red-400"
+                        className="p-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FDECEC] text-[#718096] hover:text-[#9E3B3B] border border-[#E5E2F0]"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -321,12 +330,12 @@ export const TasksPage = () => {
             );
 
             return (
-              <div key={col.status} className="glass-panel p-4 flex flex-col min-h-[450px]">
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <div key={col.status} className="pastel-card p-4 bg-[#FFFFFF] flex flex-col min-h-[450px]">
+                <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#F0EDF9]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#718096]">
                     {col.title}
                   </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-[#ECE9FB] text-[#7A68DE] font-bold">
                     {colTasks.length}
                   </span>
                 </div>
@@ -335,15 +344,15 @@ export const TasksPage = () => {
                   {colTasks.map((t) => (
                     <div
                       key={t._id}
-                      className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-slate-700 space-y-2 text-xs"
+                      className="p-3.5 rounded-xl bg-[#FBFAFF] border border-[#EAE7F5] hover:border-[#D6D0EB] space-y-2 text-xs shadow-xs"
                     >
                       <div className="flex items-center justify-between">
                         {getPriorityBadge(t.priority)}
-                        <span className="text-[10px] text-slate-500">{t.estimatedDuration}m</span>
+                        <span className="text-[10px] text-[#718096] font-medium">{t.estimatedDuration}m</span>
                       </div>
-                      <h4 className="font-semibold text-slate-200">{t.title}</h4>
+                      <h4 className="font-bold text-[#26324A]">{t.title}</h4>
                       {t.deadline && (
-                        <div className="text-[10px] text-amber-400 flex items-center gap-1">
+                        <div className="text-[10px] text-[#8E6814] font-semibold flex items-center gap-1">
                           <Calendar className="w-3 h-3" />
                           {new Date(t.deadline).toLocaleDateString()}
                         </div>
@@ -352,16 +361,16 @@ export const TasksPage = () => {
                         {col.status !== 'completed' && (
                           <button
                             onClick={() => startSession(t._id)}
-                            className="p-1 rounded bg-brand-600/30 text-brand-300"
+                            className="p-1.5 rounded-lg bg-[#ECE9FB] text-[#7A68DE]"
                           >
-                            <Play className="w-3 h-3 fill-current" />
+                            <Play className="w-3.5 h-3.5 fill-current" />
                           </button>
                         )}
                         <button
                           onClick={() => handleComplete(t._id)}
-                          className="p-1 rounded bg-slate-800 text-slate-400 hover:text-emerald-400"
+                          className="p-1.5 rounded-lg bg-[#FFFFFF] text-[#718096] hover:text-[#1E7B58] border border-[#E5E2F0]"
                         >
-                          <CheckCircle2 className="w-3 h-3" />
+                          <CheckCircle2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>

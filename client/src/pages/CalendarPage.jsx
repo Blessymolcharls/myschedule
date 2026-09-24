@@ -4,21 +4,16 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
-  Plus,
   Lock,
-  Clock,
-  AlertCircle,
   RefreshCw,
-  CheckCircle2,
 } from 'lucide-react';
-import { scheduleApi, taskApi, commitmentApi } from '../services/api';
+import { scheduleApi, commitmentApi } from '../services/api';
 import { AutoScheduleModal } from '../components/schedule/AutoScheduleModal';
 import { CommitmentModal } from '../components/commitments/CommitmentModal';
-import { TaskModal } from '../components/tasks/TaskModal';
 
 export const CalendarPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState('week'); // 'day', 'week', 'month'
+  const [viewMode, setViewMode] = useState('week');
   const [events, setEvents] = useState([]);
   const [commitments, setCommitments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +21,6 @@ export const CalendarPage = () => {
   // Modals
   const [autoScheduleOpen, setAutoScheduleOpen] = useState(false);
   const [commitmentModalOpen, setCommitmentModalOpen] = useState(false);
-  const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [rescheduling, setRescheduling] = useState(false);
 
   const fetchCalendarEvents = async () => {
@@ -85,7 +79,6 @@ export const CalendarPage = () => {
     }
   };
 
-  // Helper to generate 7 week days
   const getWeekDays = (baseDate) => {
     const curr = new Date(baseDate);
     const firstDay = curr.getDate() - curr.getDay() + 1; // Monday start
@@ -104,11 +97,13 @@ export const CalendarPage = () => {
       {/* Header and Controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2.5">
-            <CalendarIcon className="w-6 h-6 text-brand-400" />
+          <h1 className="text-2xl font-extrabold text-[#26324A] flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
+              <CalendarIcon className="w-5 h-5" />
+            </div>
             Smart Schedule & Calendar
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#718096] mt-1 font-medium">
             Visualized time allocations, recurring commitments, and non-conflicting intelligent blocks.
           </p>
         </div>
@@ -117,23 +112,23 @@ export const CalendarPage = () => {
           <button
             onClick={handleDynamicReschedule}
             disabled={rescheduling}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all disabled:opacity-50"
+            className="btn-secondary-pastel flex items-center gap-2 px-3.5 py-2 text-xs disabled:opacity-50"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-brand-400 ${rescheduling ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-[#8B7BE8] ${rescheduling ? 'animate-spin' : ''}`} />
             <span>Dynamic Rebalance</span>
           </button>
 
           <button
             onClick={() => setCommitmentModalOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 text-xs font-semibold border border-rose-500/30 transition-all"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#FDECEC] hover:bg-[#FCD8D8] text-[#9E3B3B] text-xs font-bold border border-[#F7C8C8] transition-all shadow-xs"
           >
-            <Lock className="w-3.5 h-3.5 text-rose-400" />
+            <Lock className="w-3.5 h-3.5" />
             <span>Lock Fixed Block</span>
           </button>
 
           <button
             onClick={() => setAutoScheduleOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white text-xs font-bold shadow-glow transition-all"
+            className="btn-primary-pastel flex items-center gap-2 px-4 py-2 text-xs shadow-button"
           >
             <Sparkles className="w-4 h-4" />
             <span>Auto-Schedule Horizon</span>
@@ -142,42 +137,42 @@ export const CalendarPage = () => {
       </div>
 
       {/* Date Navigation & View Selector */}
-      <div className="glass-panel p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="pastel-card p-4 bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setCurrentDate(new Date())}
-            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300"
+            className="btn-secondary-pastel px-3.5 py-1.5 text-xs"
           >
             Today
           </button>
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrev}
-              className="p-1.5 rounded-xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white"
+              className="p-1.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] hover:bg-[#F2EFFB] text-[#718096] hover:text-[#26324A]"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
-              className="p-1.5 rounded-xl bg-slate-950 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white"
+              className="p-1.5 rounded-xl bg-[#FAF9FD] border border-[#E5E2F0] hover:bg-[#F2EFFB] text-[#718096] hover:text-[#26324A]"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <span className="text-sm font-bold text-slate-200">
+          <span className="text-sm font-bold text-[#26324A]">
             {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
           </span>
         </div>
 
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-850">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FAF9FD] border border-[#EAE7F5]">
           {['day', 'week', 'month'].map((mode) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition-all ${
                 viewMode === mode
-                  ? 'bg-brand-600 text-white shadow-glow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                  : 'text-[#718096] hover:text-[#26324A]'
               }`}
             >
               {mode}
@@ -187,11 +182,10 @@ export const CalendarPage = () => {
       </div>
 
       {/* Calendar Week View Grid */}
-      <div className="glass-panel p-4 sm:p-6 overflow-x-auto">
+      <div className="pastel-card p-5 bg-[#FFFFFF] overflow-x-auto">
         <div className="min-w-[760px] grid grid-cols-7 gap-3">
           {weekDays.map((day, idx) => {
-            const isToday =
-              day.toDateString() === new Date().toDateString();
+            const isToday = day.toDateString() === new Date().toDateString();
 
             const dayEvents = events.filter((ev) => {
               const d = new Date(ev.startTime);
@@ -207,20 +201,20 @@ export const CalendarPage = () => {
                 key={idx}
                 className={`flex flex-col rounded-2xl border p-3 min-h-[420px] transition-all ${
                   isToday
-                    ? 'bg-brand-950/20 border-brand-500/40 shadow-glow'
-                    : 'bg-slate-950/50 border-slate-850'
+                    ? 'bg-[#F9F7FD] border-[#C8BFF2] shadow-sm'
+                    : 'bg-[#FBFAFF] border-[#EAE7F5]'
                 }`}
               >
                 {/* Column Header */}
-                <div className="pb-2 mb-2 border-b border-slate-800/80 text-center">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="pb-2 mb-2 border-b border-[#F0EDF9] text-center">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#718096]">
                     {day.toLocaleDateString('en-US', { weekday: 'short' })}
                   </div>
                   <div
                     className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold mt-1 ${
                       isToday
-                        ? 'bg-brand-600 text-white shadow-glow'
-                        : 'text-slate-200'
+                        ? 'bg-[#8B7BE8] text-white shadow-button'
+                        : 'text-[#26324A]'
                     }`}
                   >
                     {day.getDate()}
@@ -230,7 +224,7 @@ export const CalendarPage = () => {
                 {/* Day's Event Stack */}
                 <div className="space-y-2 flex-1 overflow-y-auto">
                   {dayEvents.length === 0 ? (
-                    <div className="text-center py-8 text-[11px] text-slate-600">
+                    <div className="text-center py-10 text-[11px] text-[#9AA5B8]">
                       No events
                     </div>
                   ) : (
@@ -239,21 +233,24 @@ export const CalendarPage = () => {
                       return (
                         <div
                           key={ev._id}
-                          className={`p-2 rounded-xl border text-xs transition-all ${
+                          className={`p-2.5 rounded-xl border text-xs transition-all ${
                             isCompleted
-                              ? 'bg-slate-950/60 border-slate-800 text-slate-500 line-through'
-                              : 'bg-brand-900/20 border-brand-500/30 text-slate-200 hover:border-brand-400'
+                              ? 'bg-[#FAF9FD] border-[#EAE7F5] text-[#9AA5B8] line-through'
+                              : 'bg-[#FFFFFF] border-[#E2DCF7] text-[#26324A] hover:border-[#8B7BE8] shadow-xs'
                           }`}
                         >
                           <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="font-mono text-[10px] text-brand-300 font-semibold">
-                              {new Date(ev.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <span className="font-mono text-[10px] text-[#8B7BE8] font-bold">
+                              {new Date(ev.startTime).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
                             </span>
-                            <span className="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-400">
+                            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#ECE9FB] text-[#7A68DE] font-bold">
                               {ev.allocatedMinutes}m
                             </span>
                           </div>
-                          <div className="font-semibold text-slate-100 text-[11px] line-clamp-2">
+                          <div className="font-bold text-[#26324A] text-[11px] line-clamp-2">
                             {ev.title}
                           </div>
                         </div>

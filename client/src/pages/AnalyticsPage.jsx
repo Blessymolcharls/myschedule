@@ -3,17 +3,12 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   TrendingUp,
-  Target,
-  Clock,
   Sparkles,
   AlertCircle,
   CheckCircle2,
-  HelpCircle,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
-  AreaChart,
-  Area,
   BarChart,
   Bar,
   XAxis,
@@ -47,23 +42,25 @@ export const AnalyticsPage = () => {
     fetchAnalytics();
   }, [days]);
 
-  const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4'];
+  const PASTEL_COLORS = ['#8B7BE8', '#78D6B0', '#8FA8E8', '#F4D77A', '#F7C5A8', '#E99A9A'];
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-100 flex items-center gap-2.5">
-            <BarChart3 className="w-6 h-6 text-brand-400" />
+          <h1 className="text-2xl font-extrabold text-[#26324A] flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
+              <BarChart3 className="w-5 h-5" />
+            </div>
             Productivity Analytics & Planned vs Actual
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-[#718096] mt-1 font-medium">
             Evaluate time estimation accuracy, category distributions, adherence trends, and adaptive insights.
           </p>
         </div>
 
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900 border border-slate-800 self-start sm:self-auto">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FAF9FD] border border-[#EAE7F5] self-start sm:self-auto">
           {[
             { label: '7 Days', val: 7 },
             { label: '14 Days', val: 14 },
@@ -72,10 +69,10 @@ export const AnalyticsPage = () => {
             <button
               key={item.val}
               onClick={() => setDays(item.val)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 days === item.val
-                  ? 'bg-brand-600 text-white shadow-glow'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                  : 'text-[#718096] hover:text-[#26324A]'
               }`}
             >
               {item.label}
@@ -86,47 +83,47 @@ export const AnalyticsPage = () => {
 
       {/* Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-5">
-          <span className="text-xs text-slate-400 font-semibold">Estimation Accuracy</span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-brand-300 mt-2">
+        <div className="pastel-card p-5 bg-[#FFFFFF]">
+          <span className="text-xs text-[#718096] font-bold">Estimation Accuracy</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#7A68DE] mt-2">
             {data?.summary?.estimationAccuracy || 0}%
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Planned vs actual effort</p>
+          <p className="text-[11px] text-[#718096] mt-1 font-medium">Planned vs actual effort</p>
         </div>
 
-        <div className="glass-panel p-5">
-          <span className="text-xs text-slate-400 font-semibold">Average Adherence</span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-2">
+        <div className="pastel-card p-5 bg-[#FFFFFF]">
+          <span className="text-xs text-[#718096] font-bold">Average Adherence</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#1E7B58] mt-2">
             {data?.summary?.averageAdherence || 0}%
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Schedule compliance rate</p>
+          <p className="text-[11px] text-[#718096] mt-1 font-medium">Schedule compliance rate</p>
         </div>
 
-        <div className="glass-panel p-5">
-          <span className="text-xs text-slate-400 font-semibold">Completion Velocity</span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-indigo-300 mt-2">
+        <div className="pastel-card p-5 bg-[#FFFFFF]">
+          <span className="text-xs text-[#718096] font-bold">Completion Velocity</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#3B5B9E] mt-2">
             {data?.summary?.completionRate || 0}%
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
+          <p className="text-[11px] text-[#718096] mt-1 font-medium">
             {data?.summary?.completedCount || 0} of {data?.summary?.totalTasks || 0} tasks
           </p>
         </div>
 
-        <div className="glass-panel p-5">
-          <span className="text-xs text-slate-400 font-semibold">Hours Logged</span>
-          <div className="text-2xl sm:text-3xl font-extrabold text-amber-300 mt-2">
+        <div className="pastel-card p-5 bg-[#FFFFFF]">
+          <span className="text-xs text-[#718096] font-bold">Hours Logged</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#D99A1C] mt-2">
             {data?.summary?.totalActualHours || 0}h
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
+          <p className="text-[11px] text-[#718096] mt-1 font-medium">
             Planned: {data?.summary?.totalPlannedHours || 0}h
           </p>
         </div>
       </div>
 
-      {/* Adaptive Insights Bar */}
+      {/* Adaptive Insights */}
       {data?.insights && data.insights.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-brand-400 flex items-center gap-1.5">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#7A68DE] flex items-center gap-1.5">
             <Sparkles className="w-4 h-4" />
             Adaptive Scheduling Intelligence Insights
           </h3>
@@ -136,18 +133,18 @@ export const AnalyticsPage = () => {
                 key={i}
                 className={`p-4 rounded-2xl border text-xs flex items-start gap-3 ${
                   ins.type === 'warning'
-                    ? 'bg-amber-950/20 border-amber-500/30 text-amber-200'
-                    : 'bg-emerald-950/20 border-emerald-500/30 text-emerald-200'
+                    ? 'bg-[#FEF8E3] border-[#F7E5A0] text-[#8E6814]'
+                    : 'bg-[#E4F7F0] border-[#BCECD9] text-[#1E7B58]'
                 }`}
               >
                 {ins.type === 'warning' ? (
-                  <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-[#8E6814] flex-shrink-0 mt-0.5" />
                 ) : (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-4 h-4 text-[#1E7B58] flex-shrink-0 mt-0.5" />
                 )}
                 <div>
-                  <div className="font-bold">{ins.title}</div>
-                  <div className="text-[11px] opacity-85 mt-0.5 leading-relaxed">{ins.message}</div>
+                  <div className="font-bold text-[#26324A]">{ins.title}</div>
+                  <div className="text-[11px] mt-0.5 leading-relaxed">{ins.message}</div>
                 </div>
               </div>
             ))}
@@ -158,27 +155,34 @@ export const AnalyticsPage = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Planned vs Actual Trend */}
-        <div className="glass-panel p-5 sm:p-6 space-y-4">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-brand-400" />
+        <div className="pastel-card p-5 sm:p-6 bg-[#FFFFFF] space-y-4">
+          <h3 className="text-xs font-bold text-[#26324A] flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-[#8B7BE8]" />
             Planned vs Actual Execution (Hours)
           </h3>
           <div className="h-64">
             {data?.adherenceTrend && data.adherenceTrend.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data.adherenceTrend}>
-                  <XAxis dataKey="date" stroke="#64748b" fontSize={10} tickLine={false} />
-                  <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
+                  <XAxis dataKey="date" stroke="#9AA5B8" fontSize={10} tickLine={false} />
+                  <YAxis stroke="#9AA5B8" fontSize={10} tickLine={false} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    contentStyle={{
+                      backgroundColor: '#FFFFFF',
+                      borderColor: '#E5E2F0',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      color: '#26324A',
+                      boxShadow: '0 4px 16px rgba(80, 70, 130, 0.08)',
+                    }}
                   />
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                  <Bar dataKey="planned" name="Planned (h)" fill="#6366f1" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="actual" name="Actual (h)" fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="planned" name="Planned (h)" fill="#8B7BE8" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="actual" name="Actual (h)" fill="#78D6B0" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-slate-500">
+              <div className="h-full flex items-center justify-center text-xs text-[#9AA5B8]">
                 Not enough historical trend data yet.
               </div>
             )}
@@ -186,9 +190,9 @@ export const AnalyticsPage = () => {
         </div>
 
         {/* Category Breakdown Pie Chart */}
-        <div className="glass-panel p-5 sm:p-6 space-y-4">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <PieChartIcon className="w-4 h-4 text-brand-400" />
+        <div className="pastel-card p-5 sm:p-6 bg-[#FFFFFF] space-y-4">
+          <h3 className="text-xs font-bold text-[#26324A] flex items-center gap-2">
+            <PieChartIcon className="w-4 h-4 text-[#8B7BE8]" />
             Category Time Distribution
           </h3>
           <div className="h-64">
@@ -206,16 +210,26 @@ export const AnalyticsPage = () => {
                     fontSize={10}
                   >
                     {data.categoryBreakdown.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color || PASTEL_COLORS[index % PASTEL_COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                    contentStyle={{
+                      backgroundColor: '#FFFFFF',
+                      borderColor: '#E5E2F0',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      color: '#26324A',
+                      boxShadow: '0 4px 16px rgba(80, 70, 130, 0.08)',
+                    }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full flex items-center justify-center text-xs text-slate-500">
+              <div className="h-full flex items-center justify-center text-xs text-[#9AA5B8]">
                 No category time recorded yet.
               </div>
             )}
@@ -224,12 +238,12 @@ export const AnalyticsPage = () => {
       </div>
 
       {/* Planned vs Actual Estimation Variance List */}
-      <div className="glass-panel p-5 sm:p-6 space-y-4">
-        <h3 className="text-sm font-bold text-slate-100">Task Estimation Accuracy Ledger</h3>
+      <div className="pastel-card p-5 sm:p-6 bg-[#FFFFFF] space-y-4">
+        <h3 className="text-xs font-bold text-[#26324A]">Task Estimation Accuracy Ledger</h3>
         {data?.taskEstimationVariances && data.taskEstimationVariances.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="text-slate-500 uppercase text-[10px] border-b border-slate-800 pb-2">
+            <table className="w-full text-left text-xs text-[#718096]">
+              <thead className="text-[#9AA5B8] uppercase text-[10px] border-b border-[#F0EDF9] pb-2 font-bold">
                 <tr>
                   <th className="pb-2">Task</th>
                   <th className="pb-2">Estimated</th>
@@ -238,25 +252,25 @@ export const AnalyticsPage = () => {
                   <th className="pb-2">Precision</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-850 font-medium">
+              <tbody className="divide-y divide-[#F5F2FC] font-medium">
                 {data.taskEstimationVariances.map((v, i) => (
-                  <tr key={i} className="hover:bg-slate-900/40">
-                    <td className="py-2.5 font-semibold text-slate-200">{v.title}</td>
-                    <td className="py-2.5 font-mono text-slate-400">{v.estimated}m</td>
-                    <td className="py-2.5 font-mono text-brand-300">{v.actual}m</td>
-                    <td className="py-2.5 font-mono">
-                      <span className={v.diffMinutes > 0 ? 'text-amber-400' : 'text-emerald-400'}>
+                  <tr key={i} className="hover:bg-[#FAF9FD]">
+                    <td className="py-2.5 font-bold text-[#26324A]">{v.title}</td>
+                    <td className="py-2.5 font-mono text-[#718096]">{v.estimated}m</td>
+                    <td className="py-2.5 font-mono text-[#8B7BE8] font-bold">{v.actual}m</td>
+                    <td className="py-2.5 font-mono font-bold">
+                      <span className={v.diffMinutes > 0 ? 'text-[#D99A1C]' : 'text-[#1E7B58]'}>
                         {v.diffMinutes > 0 ? `+${v.diffMinutes}m` : `${v.diffMinutes}m`}
                       </span>
                     </td>
-                    <td className="py-2.5 font-bold text-slate-300">{v.accuracyPercent}%</td>
+                    <td className="py-2.5 font-bold text-[#26324A]">{v.accuracyPercent}%</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         ) : (
-          <p className="text-xs text-slate-500 text-center py-4">
+          <p className="text-xs text-[#9AA5B8] text-center py-4">
             Complete tasks to compare planned vs actual durations.
           </p>
         )}

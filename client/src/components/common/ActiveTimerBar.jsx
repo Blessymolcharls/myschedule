@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTimer } from '../../context/TimerContext';
-import { Play, Square, CheckCircle2, Clock } from 'lucide-react';
+import { Square, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ActiveTimerBar = () => {
@@ -9,25 +9,25 @@ export const ActiveTimerBar = () => {
   if (!activeSession) return null;
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3.5 bg-slate-900/95 border border-brand-500/40 backdrop-blur-xl px-4 py-2.5 rounded-2xl shadow-2xl glow-brand animate-bounce-short">
-      <div className="flex items-center gap-2">
+    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3.5 bg-[#FFFFFF] border border-[#E2DCF7] px-4 py-3 rounded-2xl shadow-popover animate-in fade-in slide-in-from-bottom-3 duration-300">
+      <div className="flex items-center gap-2.5">
         <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#78D6B0] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#54C497]"></span>
         </span>
         <div className="flex flex-col">
-          <span className="text-xs text-slate-400 font-medium">Focusing on:</span>
+          <span className="text-[11px] text-[#718096] font-medium leading-none">Focusing on:</span>
           <Link
             to="/time-tracker"
-            className="text-xs font-semibold text-slate-100 truncate max-w-[140px] hover:text-brand-300"
+            className="text-xs font-bold text-[#26324A] truncate max-w-[150px] hover:text-[#8B7BE8] mt-0.5"
           >
             {activeSession.taskId?.title || 'Active Session'}
           </Link>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 pl-2 border-l border-slate-700/60">
-        <span className="font-mono text-sm font-bold text-brand-300 tracking-wider">
+      <div className="flex items-center gap-2 pl-3 border-l border-[#E5E2F0]">
+        <span className="font-mono text-sm font-bold text-[#8B7BE8] tracking-wider">
           {formattedElapsed}
         </span>
       </div>
@@ -35,15 +35,15 @@ export const ActiveTimerBar = () => {
       <div className="flex items-center gap-1.5 pl-1">
         <button
           onClick={() => stopSession(false)}
-          title="Stop & Save Session"
-          className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+          title="Pause & Save"
+          className="p-1.5 rounded-lg bg-[#FAF9FD] hover:bg-[#EFECFA] text-[#718096] hover:text-[#26324A] border border-[#E5E2F0] transition-colors"
         >
           <Square className="w-3.5 h-3.5 fill-current" />
         </button>
         <button
           onClick={() => stopSession(true)}
-          title="Complete Task & Stop"
-          className="p-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-400 hover:text-emerald-200 border border-emerald-500/30 transition-colors"
+          title="Complete Task"
+          className="p-1.5 rounded-lg bg-[#E4F7F0] hover:bg-[#D0F2E5] text-[#1E7B58] border border-[#BCECD9] transition-colors"
         >
           <CheckCircle2 className="w-3.5 h-3.5" />
         </button>
