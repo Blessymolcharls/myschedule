@@ -1,0 +1,20 @@
+{
+  "name": "myschedule",
+  "version": "1.0.0",
+  "description": "MySchedule - Intelligent Personal Scheduler & Productivity Management Platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "test:server": "npm test --prefix server",
+    "build:client": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "keywords": ["scheduler", "productivity", "mern", "adherence", "streaks", "intelligent-scheduling"],
+  "author": "Antigravity Team",
+  "license": "ISC"
+}
