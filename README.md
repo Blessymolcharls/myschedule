@@ -60,6 +60,9 @@
 ```bash
 # 1. Install all dependencies (root, server, and client)
 npm run install:all
+
+# 2. Configure environment files (server/.env and client/.env)
+# Customize server/.env with your MongoDB URI if using MongoDB Atlas
 ```
 
 ### Running Locally

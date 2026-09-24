@@ -18,6 +18,7 @@ import {
 import { scheduleApi, taskApi, streakApi } from '../services/api';
 import { TaskModal } from '../components/tasks/TaskModal';
 import { AutoScheduleModal } from '../components/schedule/AutoScheduleModal';
+import { TimelineGrid24Hour } from '../components/schedule/TimelineGrid24Hour';
 import { Link } from 'react-router-dom';
 
 export const DashboardPage = () => {
@@ -31,9 +32,27 @@ export const DashboardPage = () => {
   const [todayProgress, setTodayProgress] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Modals
+  const [timelineView, setTimelineView] = useState('24h');
   const [taskModalOpen, setTaskModalOpen] = useState(false);
   const [autoScheduleOpen, setAutoScheduleOpen] = useState(false);
+
+  const handleToggleLock = async (event) => {
+    try {
+      await scheduleApi.updateEvent(event._id, { isLocked: !event.isLocked });
+      fetchDashboardData();
+    } catch (err) {
+      console.error('Failed to toggle lock status:', err);
+    }
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await scheduleApi.deleteEvent(eventId);
+      fetchDashboardData();
+    } catch (err) {
+      console.error('Failed to delete schedule event:', err);
+    }
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -227,162 +246,217 @@ export const DashboardPage = () => {
       {/* Main Grid: Today's Dynamic Timeline + Urgent Radar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Today's Dynamic Timeline (Main Visual Focus) */}
-        <div className="lg:col-span-2 pastel-card p-6 bg-[#FFFFFF] space-y-4">
-          <div className="flex items-center justify-between pb-3.5 border-b border-[#F0EDF9]">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
-                <Calendar className="w-4 h-4" />
+        <div className="lg:col-span-2 space-y-4">
+          <div className="pastel-card p-5 bg-[#FFFFFF]">
+            <div className="flex items-center justify-between pb-3.5 border-b border-[#F0EDF9] mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-[#ECE9FB] text-[#7A68DE]">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-base font-bold text-[#26324A]">Today's Dynamic Timeline</h2>
+                  <p className="text-[11px] text-[#718096]">Auto-allocated non-conflicting focus blocks & 24h schedule</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-base font-bold text-[#26324A]">Today's Dynamic Timeline</h2>
-                <p className="text-[11px] text-[#718096]">Auto-allocated non-conflicting focus blocks</p>
-              </div>
-            </div>
-            <Link
-              to="/calendar"
-              className="text-xs font-bold text-[#8B7BE8] hover:text-[#7A68DE] flex items-center gap-1 hover:underline"
-            >
-              Full Calendar <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
 
-          {todayEvents.length === 0 ? (
-            <div className="text-center py-12 px-4 space-y-3.5">
-              <div className="w-14 h-14 rounded-2xl bg-[#F4F1FA] border border-[#EAE7F5] flex items-center justify-center mx-auto text-[#8B7BE8]">
-                <Calendar className="w-7 h-7" />
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-bold text-[#26324A]">No scheduled sessions for today yet</p>
-                <p className="text-xs text-[#718096] max-w-sm mx-auto leading-relaxed">
-                  Your smart auto-scheduler can transform your pending tasks and deadlines into a structured, balanced schedule in seconds.
-                </p>
-              </div>
-              <button
-                onClick={() => setAutoScheduleOpen(true)}
-                className="btn-primary-pastel inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Auto-Schedule Now</span>
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {todayEvents.map((ev) => {
-                const isCurrentActive = activeSession?.taskId?._id === ev.taskId?._id;
-                const isCompleted = ev.status === 'completed';
-
-                return (
-                  <div
-                    key={ev._id}
-                    className={`p-3.5 rounded-2xl border transition-all ${
-                      isCompleted
-                        ? 'bg-[#FAF9FD] border-[#EAE7F5] opacity-75'
-                        : isCurrentActive
-                        ? 'bg-[#F5F2FC] border-[#C8BFF2] shadow-sm'
-                        : 'bg-[#FBFAFF] border-[#EAE7F5] hover:border-[#D6D0EB]'
+              <div className="flex items-center gap-2.5">
+                {/* View Switcher: 24h Grid vs List */}
+                <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FAF9FD] border border-[#EAE7F5]">
+                  <button
+                    onClick={() => setTimelineView('24h')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      timelineView === '24h'
+                        ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                        : 'text-[#718096] hover:text-[#26324A]'
                     }`}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-start gap-3">
-                        <div className="flex flex-col items-center justify-center w-14 py-2 rounded-xl bg-[#FFFFFF] border border-[#E5E2F0] text-[11px] font-mono font-bold text-[#26324A] shadow-xs">
-                          <span>
-                            {new Date(ev.startTime).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </span>
-                          <span className="text-[9px] text-[#718096] font-normal">
-                            {ev.allocatedMinutes}m
-                          </span>
-                        </div>
+                    24h Grid
+                  </button>
+                  <button
+                    onClick={() => setTimelineView('list')}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                      timelineView === 'list'
+                        ? 'bg-[#FFFFFF] text-[#6450C7] shadow-xs border border-[#E2DCF7]'
+                        : 'text-[#718096] hover:text-[#26324A]'
+                    }`}
+                  >
+                    List View
+                  </button>
+                </div>
 
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span
-                              className={`text-xs sm:text-sm font-bold ${
-                                isCompleted ? 'line-through text-[#9AA5B8]' : 'text-[#26324A]'
-                              }`}
-                            >
-                              {ev.title}
-                            </span>
-                            {ev.totalChunks > 1 && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#ECE9FB] text-[#7A68DE] font-semibold">
-                                Session {ev.chunkIndex}/{ev.totalChunks}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 mt-1 text-xs text-[#718096]">
-                            <span>
-                              {new Date(ev.startTime).toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}{' '}
-                              -{' '}
-                              {new Date(ev.endTime).toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </span>
-                            {ev.taskId?.priority && (
-                              <span
-                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                                  ev.taskId.priority === 'urgent'
-                                    ? 'bg-[#FDECEC] text-[#9E3B3B] border border-[#F7C8C8]'
-                                    : ev.taskId.priority === 'high'
-                                    ? 'bg-[#FEF8E3] text-[#8E6814] border border-[#F7E5A0]'
-                                    : 'bg-[#ECE9FB] text-[#6450C7] border border-[#DCD5F7]'
-                                }`}
-                              >
-                                {ev.taskId.priority}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="flex items-center gap-2 self-end sm:self-auto">
-                        {!isCompleted && (
-                          <>
-                            {isCurrentActive ? (
-                              <button
-                                onClick={() => stopSession(false)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF9FD] text-xs font-bold text-[#26324A] border border-[#E5E2F0]"
-                              >
-                                <Square className="w-3.5 h-3.5 fill-current" />
-                                <span>Pause</span>
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => startSession(ev.taskId?._id || ev.taskId, ev._id)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] border border-[#D0C6F0] text-xs font-bold transition-all"
-                              >
-                                <Play className="w-3.5 h-3.5 fill-current" />
-                                <span>Focus</span>
-                              </button>
-                            )}
-
-                            <button
-                              onClick={() => handleCompleteEvent(ev)}
-                              title="Mark Completed"
-                              className="p-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E4F7F0] hover:text-[#1E7B58] text-[#718096] border border-[#E5E2F0] transition-colors"
-                            >
-                              <CheckCircle2 className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                        {isCompleted && (
-                          <span className="text-xs text-[#1E7B58] font-bold flex items-center gap-1 bg-[#E4F7F0] px-2.5 py-1 rounded-full border border-[#BCECD9]">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Done
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                <Link
+                  to="/calendar"
+                  className="text-xs font-bold text-[#8B7BE8] hover:text-[#7A68DE] flex items-center gap-1 hover:underline ml-1"
+                >
+                  Full Calendar <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
-          )}
+
+            {/* Render 24h Visual Timeline Grid */}
+            {timelineView === '24h' ? (
+              <TimelineGrid24Hour
+                date={new Date()}
+                events={todayEvents}
+                commitments={commitments}
+                preferences={preferences}
+                activeSession={activeSession}
+                onFocusTask={startSession}
+                onCompleteEvent={handleCompleteEvent}
+                onToggleLock={handleToggleLock}
+                onDeleteEvent={handleDeleteEvent}
+                onAutoSchedule={() => setAutoScheduleOpen(true)}
+                onSlotClick={(slotDate) => setTaskModalOpen(true)}
+                containerHeight="480px"
+                hourHeight={60}
+                showStatsHeader={true}
+              />
+            ) : (
+              /* Compact List View */
+              <div>
+                {todayEvents.length === 0 ? (
+                  <div className="text-center py-12 px-4 space-y-3.5">
+                    <div className="w-14 h-14 rounded-2xl bg-[#F4F1FA] border border-[#EAE7F5] flex items-center justify-center mx-auto text-[#8B7BE8]">
+                      <Calendar className="w-7 h-7" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-bold text-[#26324A]">No scheduled sessions for today yet</p>
+                      <p className="text-xs text-[#718096] max-w-sm mx-auto leading-relaxed">
+                        Your smart auto-scheduler can transform your pending tasks and deadlines into a structured, balanced schedule in seconds.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setAutoScheduleOpen(true)}
+                      className="btn-primary-pastel inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold shadow-button"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      <span>Auto-Schedule Now</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {todayEvents.map((ev) => {
+                      const isCurrentActive = activeSession?.taskId?._id === ev.taskId?._id;
+                      const isCompleted = ev.status === 'completed';
+
+                      return (
+                        <div
+                          key={ev._id}
+                          className={`p-3.5 rounded-2xl border transition-all ${
+                            isCompleted
+                              ? 'bg-[#FAF9FD] border-[#EAE7F5] opacity-75'
+                              : isCurrentActive
+                              ? 'bg-[#F5F2FC] border-[#C8BFF2] shadow-sm'
+                              : 'bg-[#FBFAFF] border-[#EAE7F5] hover:border-[#D6D0EB]'
+                          }`}
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="flex items-start gap-3">
+                              <div className="flex flex-col items-center justify-center w-14 py-2 rounded-xl bg-[#FFFFFF] border border-[#E5E2F0] text-[11px] font-mono font-bold text-[#26324A] shadow-xs">
+                                <span>
+                                  {new Date(ev.startTime).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false,
+                                  })}
+                                </span>
+                                <span className="text-[9px] text-[#718096] font-normal">
+                                  {ev.allocatedMinutes}m
+                                </span>
+                              </div>
+
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span
+                                    className={`text-xs sm:text-sm font-bold ${
+                                      isCompleted ? 'line-through text-[#9AA5B8]' : 'text-[#26324A]'
+                                    }`}
+                                  >
+                                    {ev.title}
+                                  </span>
+                                  {ev.totalChunks > 1 && (
+                                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#ECE9FB] text-[#7A68DE] font-semibold">
+                                      Session {ev.chunkIndex}/{ev.totalChunks}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 mt-1 text-xs text-[#718096]">
+                                  <span>
+                                    {new Date(ev.startTime).toLocaleTimeString([], {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                      hour12: false,
+                                    })}{' '}
+                                    -{' '}
+                                    {new Date(ev.endTime).toLocaleTimeString([], {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                      hour12: false,
+                                    })}
+                                  </span>
+                                  {ev.taskId?.priority && (
+                                    <span
+                                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                                        ev.taskId.priority === 'urgent'
+                                          ? 'bg-[#FDECEC] text-[#9E3B3B] border border-[#F7C8C8]'
+                                          : ev.taskId.priority === 'high'
+                                          ? 'bg-[#FEF8E3] text-[#8E6814] border border-[#F7E5A0]'
+                                          : 'bg-[#ECE9FB] text-[#6450C7] border border-[#DCD5F7]'
+                                      }`}
+                                    >
+                                      {ev.taskId.priority}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Action buttons */}
+                            <div className="flex items-center gap-2 self-end sm:self-auto">
+                              {!isCompleted && (
+                                <>
+                                  {isCurrentActive ? (
+                                    <button
+                                      onClick={() => stopSession(false)}
+                                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF9FD] text-xs font-bold text-[#26324A] border border-[#E5E2F0]"
+                                    >
+                                      <Square className="w-3.5 h-3.5 fill-current" />
+                                      <span>Pause</span>
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => startSession(ev.taskId?._id || ev.taskId, ev._id)}
+                                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE9FB] hover:bg-[#E0DAF7] text-[#7A68DE] border border-[#D0C6F0] text-xs font-bold transition-all"
+                                    >
+                                      <Play className="w-3.5 h-3.5 fill-current" />
+                                      <span>Focus</span>
+                                    </button>
+                                  )}
+
+                                  <button
+                                    onClick={() => handleCompleteEvent(ev)}
+                                    title="Mark Completed"
+                                    className="p-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E4F7F0] hover:text-[#1E7B58] text-[#718096] border border-[#E5E2F0] transition-colors"
+                                  >
+                                    <CheckCircle2 className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                              {isCompleted && (
+                                <span className="text-xs text-[#1E7B58] font-bold flex items-center gap-1 bg-[#E4F7F0] px-2.5 py-1 rounded-full border border-[#BCECD9]">
+                                  <CheckCircle2 className="w-3.5 h-3.5" /> Done
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right 1 Col: Urgent Radar + Active Focus Widget */}
